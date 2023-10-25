@@ -2,6 +2,9 @@
 const express = require("express");
 const app = express();
 
+// Traer el objeto de conexión
+const sequelize = require('./utils/database')
+
 // Middleware
 app.use(express.json());
 
@@ -12,6 +15,10 @@ app.get('/test', (request, response) => {
 });
 
 // Levantar el server y escuchar peticiones
-app.listen(8080, () => {
-    console.log("Servidor escuchando");
-});
+sequelize.sync()
+    .then(result => {
+        app.listen(8080, () => {
+            console.log("Servidor escuchando");
+        })
+    })
+    .catch(error => console.log(error));
